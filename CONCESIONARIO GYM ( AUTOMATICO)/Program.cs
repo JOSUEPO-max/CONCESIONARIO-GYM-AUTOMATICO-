@@ -64,10 +64,29 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             servicioAcceso.ValidarIngreso(cedulaAcceso);
                             break;
 
+
+                        case "4":
+                            servicioClases.MostrarClasesDisponibles();
+                            Console.Write("\nIngrese el ID de la clase que desea reservar (o 0 para volver): ");
+                            int idClase = int.Parse(Console.ReadLine());
+                            if (idClase != 0)
+                            {
+                                servicioClases.AgendarCupoEnClase(idClase);
+                            }
+                            Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                            Console.ReadKey();
+                            break;
+
                         case "5":
                             Console.Write("\nIngrese Cédula a buscar: ");
                             string cedulaBuscar = Console.ReadLine();
                             servicioSocios.ConsultarSocioPorCedula(cedulaBuscar);
+                            break;
+
+                        case "6":
+                            servicioAcceso.MostrarResumenAcceso();
+                            Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                            Console.ReadKey();
                             break;
 
                         case "7":
