@@ -1,9 +1,11 @@
-﻿using CONCESIONARIO_GYM___AUTOMATICO_.servicios;
+﻿using CONCESIONARIO_GYM___AUTOMATICO_.models;
+using CONCESIONARIO_GYM___AUTOMATICO_.servicios;
+using CONCESIONARIO_GYM___AUTOMATICO_.utills;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CONCESIONARIO_GYM___AUTOMATICO_.models
+namespace CONCESIONARIO_GYM___AUTOMATICO_
 {
     class Program
     {
