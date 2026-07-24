@@ -37,30 +37,27 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                     switch (opcion)
                     {
                         case "1":
-                            Console.Write("\nIngrese ID del socio: ");
-                            int id = int.Parse(Console.ReadLine());
-                            Console.Write("Ingrese Nombre: ");
-                            string nombre = Console.ReadLine();
-                            Console.Write("Ingrese Cédula: ");
-                            string cedula = Console.ReadLine();
-                            Console.Write("Ingrese Edad: ");
-                            int edad = int.Parse(Console.ReadLine());
-                            Console.Write("Ingrese Tipo de Membresía (estandar/vip): ");
-                            string tipo = Console.ReadLine();
+                            Console.WriteLine("\n--- REGISTRO DE NUEVO SOCIO ---");
+                            int id = Validaciones.LeerEnteroPositivo("Ingrese ID del socio: ");
+                            string nombre = Validaciones.LeerTextoNoVacio("Ingrese Nombre completo: ");
+                            string cedula = Validaciones.LeerCedulaValida("Ingrese Cédula (10 dígitos): ");
+                            int edad = Validaciones.LeerEnteroPositivo("Ingrese Edad: ");
+
+                            string tipo = Validaciones.LeerTextoNoVacio("Ingrese Tipo de Membresía (estandar/vip): ");
 
                             Socio nuevoSocio = new Socio(id, nombre, cedula, edad, true, tipo);
                             servicioSocios.RegistrarNuevoSocio(nuevoSocio);
                             break;
 
                         case "2":
-                            Console.Write("\nIngrese Cédula del socio para renovar: ");
-                            string cedulaRenovar = Console.ReadLine();
+                            Console.WriteLine("\n--- RENOVACIÓN DE MEMBRESÍA ---");
+                            string cedulaRenovar = Validaciones.LeerCedulaValida("Ingrese Cédula del socio: ");
                             servicioSocios.RenovarMembresia(cedulaRenovar);
                             break;
 
                         case "3":
-                            Console.Write("\n[CHECK-IN] Ingrese Cédula del socio: ");
-                            string cedulaAcceso = Console.ReadLine();
+                            Console.WriteLine("\n--- CONTROL DE ACCESO (CHECK-IN) ---");
+                            string cedulaAcceso = Validaciones.LeerCedulaValida("Ingrese Cédula para ingresar: ");
                             servicioAcceso.ValidarIngreso(cedulaAcceso);
                             break;
 
