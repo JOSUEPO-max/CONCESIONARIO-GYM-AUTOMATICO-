@@ -81,31 +81,32 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
                         case "6":
                             servicioAcceso.MostrarResumenAcceso();
-                            Console.WriteLine("\nPresione cualquier tecla para continuar...");
-                            Console.ReadKey();
                             break;
 
                         case "7":
                             ejecutando = false;
-                            Console.WriteLine("\nGracias por usar GymSmart OS. ¡Hasta pronto!");
+                            MenuConsola.MostrarMensajeExito("Gracias por usar GymSmart OS. ¡Hasta pronto!");
                             break;
 
                         default:
-                            Console.WriteLine("\nOpción no válida. Intente de nuevo.");
+                            MenuConsola.MostrarMensajeError("Opción no válida. Intente de nuevo.");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[ERROR]: {ex.Message}");
+                    MenuConsola.MostrarMensajeError(ex.Message);
                 }
 
-                if (ejecutando && opcion != "4" && opcion != "6")
+                if (ejecutando)
                 {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     Console.WriteLine("\nPresione cualquier tecla para continuar...");
+                    Console.ResetColor();
                     Console.ReadKey();
                 }
             }
-        }
-    }
-}
+
+
+
+            
