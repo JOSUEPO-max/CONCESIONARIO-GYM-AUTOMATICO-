@@ -42,11 +42,11 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             string nombre = Validaciones.LeerTextoNoVacio("Ingrese Nombre completo: ");
                             string cedula = Validaciones.LeerCedulaValida("Ingrese Cédula (10 dígitos): ");
                             int edad = Validaciones.LeerEnteroPositivo("Ingrese Edad: ");
-
                             string tipo = Validaciones.LeerTextoNoVacio("Ingrese Tipo de Membresía (estandar/vip): ");
 
                             Socio nuevoSocio = new Socio(id, nombre, cedula, edad, true, tipo);
                             servicioSocios.RegistrarNuevoSocio(nuevoSocio);
+                            MenuConsola.MostrarMensajeExito("Socio procesado en el sistema.");
                             break;
 
                         case "2":
@@ -60,7 +60,6 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             string cedulaAcceso = Validaciones.LeerCedulaValida("Ingrese Cédula para ingresar: ");
                             servicioAcceso.ValidarIngreso(cedulaAcceso);
                             break;
-
 
                         case "4":
                             servicioClases.MostrarClasesDisponibles();
