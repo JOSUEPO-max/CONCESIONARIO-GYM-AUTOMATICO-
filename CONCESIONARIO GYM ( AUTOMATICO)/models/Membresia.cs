@@ -46,6 +46,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.models
                 duracionDias = value;
             }
         }
+        public Membresia() { }
 
         public Membresia(string nombrePlan, double precioBase, int duracionDias)
         {
