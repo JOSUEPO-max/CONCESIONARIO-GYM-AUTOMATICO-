@@ -30,4 +30,3 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
         }
     }
 }
-}
