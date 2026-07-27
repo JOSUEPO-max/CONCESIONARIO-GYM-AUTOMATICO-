@@ -72,7 +72,8 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
                             Socio nuevoSocio = new Socio(id, nombre, cedula, edad, true, tipo);
                             servicioSocios.RegistrarNuevoSocio(nuevoSocio);
-                            MenuConsola.MostrarMensajeExito("Socio procesado en el sistema.");
+                            Database.GuardarSocios();
+                            MenuConsola.MostrarMensajeExito("Socio registrado y guardado correctamente.");
                             break;
 
                         case "2":
