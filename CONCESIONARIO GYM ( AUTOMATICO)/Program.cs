@@ -1,4 +1,5 @@
-﻿using CONCESIONARIO_GYM___AUTOMATICO_.models;
+﻿using CONCESIONARIO_GYM___AUTOMATICO_.Data;
+using CONCESIONARIO_GYM___AUTOMATICO_.models;
 using CONCESIONARIO_GYM___AUTOMATICO_.servicios;
 using CONCESIONARIO_GYM___AUTOMATICO_.utills;
 using System;
@@ -11,18 +12,36 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
     {
         static void Main(string[] args)
         {
-            // Inicialización de entidades y servicios base
+            // 1. Cargar datos almacenados previamente en JSON
+            Database.CargarDatos();
+
+            // 2. Inicialización de entidades y servicios base
             Gimnasio miGimnasio = new Gimnasio("Smart Fit Centro", "Av. Principal 123", "María López", 100);
+
+            // Asignar la lista cargada desde JSON al gimnasio
+            miGimnasio.Socios = Database.Socios;
+
             GestionSocios servicioSocios = new GestionSocios(miGimnasio);
             ControlAcceso servicioAcceso = new ControlAcceso(miGimnasio);
             GestionClases servicioClases = new GestionClases();
 
-            // Carga de datos de prueba iniciales
-            miGimnasio.AgregarSocio(new Socio(1, "Carlos Andrade", "0912345678", 22, true, "estandar"));
-            miGimnasio.AgregarSocio(new Socio(2, "Ana Gómez", "0987654321", 25, false, "vip"));
+            // Asignar la lista de clases cargada desde JSON
+            servicioClases.ListaClases = Database.Clases;
 
-            servicioClases.AgregarClase(new ClaseGrupal(101, "Crossfit", "08:00 AM", 15));
-            servicioClases.AgregarClase(new ClaseGrupal(102, "Spinning", "05:00 PM", 10));
+            // 3. Carga de datos de prueba iniciales 
+            if (Database.Socios.Count == 0)
+            {
+                miGimnasio.AgregarSocio(new Socio(1, "Carlos Andrade", "0912345678", 22, true, "estandar"));
+                miGimnasio.AgregarSocio(new Socio(2, "Ana Gómez", "0987654321", 25, false, "vip"));
+                Database.GuardarSocios();
+            }
+
+            if (Database.Clases.Count == 0)
+            {
+                servicioClases.AgregarClase(new ClaseGrupal(101, "Crossfit", "08:00 AM", 15));
+                servicioClases.AgregarClase(new ClaseGrupal(102, "Spinning", "05:00 PM", 10));
+                Database.GuardarClases();
+            }
 
             bool ejecutando = true;
 
