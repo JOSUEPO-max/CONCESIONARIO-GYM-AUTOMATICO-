@@ -125,7 +125,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                     Console.ReadKey();
                 }
             }
-
+        }
 
 
             
