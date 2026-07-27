@@ -65,6 +65,11 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                         case "1":
                             Console.WriteLine("\n--- REGISTRO DE NUEVO SOCIO ---");
                             int id = Validaciones.LeerEnteroPositivo("Ingrese ID del socio: ");
+                            if (id == 0)
+                            {
+                                MenuConsola.MostrarMensajeError("Operación cancelada por el usuario.");
+                                break; // Rompe el case y regresa al menú
+                            }
                             string nombre = Validaciones.LeerTextoNoVacio("Ingrese Nombre completo: ");
                             string cedula = Validaciones.LeerCedulaValida("Ingrese Cédula (10 dígitos): ");
                             int edad = Validaciones.LeerEnteroPositivo("Ingrese Edad: ");

@@ -10,16 +10,17 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.utills
         // Valida que el texto ingresado sea un número entero positivo
         public static int LeerEnteroPositivo(string mensaje)
         {
-            int valor;
             while (true)
             {
-                Console.Write(mensaje);
-                string entrada = Console.ReadLine();
-                if (int.TryParse(entrada, out valor) && valor > 0)
+                Console.Write(mensaje + " (o digite '0' para cancelar): ");
+                string entrada = Console.ReadLine() ?? "";
+
+                if (int.TryParse(entrada, out int valor))
                 {
-                    return valor;
+                    if (valor >= 0) return valor; // Si es 0, lo retornamos como señal de cancelación
                 }
-                Console.WriteLine("[ERROR]: Debe ingresar un número entero positivo válido.");
+
+                MenuConsola.MostrarMensajeError("Debe ingresar un número entero válido.");
             }
         }
 
