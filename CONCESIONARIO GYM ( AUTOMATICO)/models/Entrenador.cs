@@ -24,7 +24,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.models
             }
         }
         public string Especialidad { get => especialidad; set => especialidad = value; }
-
+        public Entrenador() { }
         public Entrenador(int id, string nombre, string especialidad)
         {
             this.Id = id;

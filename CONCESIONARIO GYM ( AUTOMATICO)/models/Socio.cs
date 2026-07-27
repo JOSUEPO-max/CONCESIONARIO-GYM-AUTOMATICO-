@@ -53,6 +53,9 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.models
                 tipoMembresia = valorLimpio;
             }
         }
+        public Socio()
+        {
+        }
 
         // Constructor
         public Socio(int id, string nombre, string cedula, int edad, bool estadoMembresia, string tipoMembresia)

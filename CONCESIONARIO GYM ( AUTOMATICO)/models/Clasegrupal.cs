@@ -37,8 +37,9 @@ public class ClaseGrupal
             cuposDisponibles = value;
         }
     }
+        public ClaseGrupal() { }
 
-    public ClaseGrupal(int id, string nombreDisciplina, string horario, int cuposDisponibles)
+        public ClaseGrupal(int id, string nombreDisciplina, string horario, int cuposDisponibles)
     {
         this.Id = id;
         this.NombreDisciplina = nombreDisciplina;
