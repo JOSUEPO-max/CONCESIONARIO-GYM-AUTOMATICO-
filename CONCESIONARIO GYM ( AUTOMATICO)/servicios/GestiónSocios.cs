@@ -73,7 +73,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
                         {
                             foreach (var clase in clasesReservadas)
                             {
-                                Console.WriteLine($" • [ID: {clase.Id}] {clase.Nombre} - Horario: {clase.Horario}");
+                                Console.WriteLine($" • [ID: {clase.Id}] {clase.NombreDisciplina} - Horario: {clase.Horario}");
                             }
                         }
                     }
