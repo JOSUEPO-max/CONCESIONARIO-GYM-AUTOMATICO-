@@ -44,17 +44,47 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
             Console.WriteLine("No se pudo renovar: Socio no encontrado.");
         }
 
-        public void ConsultarSocioPorCedula(string cedula)
+        public void ConsultarSocioPorCedula(string cedula, List<ClaseGrupal> listaClases = null)
         {
             foreach (Socio objSocio in this.Gimnasio.Socios)
             {
                 if (objSocio.Cedula == cedula)
                 {
+                    // 1. Muestra los datos básicos del socio
+                    Console.WriteLine("\n==================================================");
+                    Console.WriteLine("                FICHA DEL SOCIO");
+                    Console.WriteLine("==================================================");
                     objSocio.Presentar();
+
+                    // 2. Si se pasó la lista de clases, busca sus reservas
+                    if (listaClases != null)
+                    {
+                        Console.WriteLine("\n--- CLASES GRUPALES RESERVADAS ---");
+
+                        // Buscamos las clases donde esté anotado el socio (por cédula o por ID)
+                        var clasesReservadas = listaClases.Where(c => c.SociosInscritos != null &&
+                                                                      c.SociosInscritos.Any(s => s.Cedula == cedula)).ToList();
+
+                        if (clasesReservadas.Count == 0)
+                        {
+                            Console.WriteLine(" (El socio no tiene clases reservadas)");
+                        }
+                        else
+                        {
+                            foreach (var clase in clasesReservadas)
+                            {
+                                Console.WriteLine($" • [ID: {clase.Id}] {clase.Nombre} - Horario: {clase.Horario}");
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("==================================================\n");
                     return;
                 }
             }
+
             Console.WriteLine("Socio no encontrado.");
         }
     }
 }
+        

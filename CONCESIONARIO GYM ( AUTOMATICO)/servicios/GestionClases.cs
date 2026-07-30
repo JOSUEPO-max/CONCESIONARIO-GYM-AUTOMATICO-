@@ -35,17 +35,17 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
             }
         }
 
-        public void AgendarCupoEnClase(int idClase)
+        public bool AgendarCupoEnClase(int idClase, Socio socio)
         {
-            foreach (ClaseGrupal objClase in this.ListaClases)
+            foreach (ClaseGrupal clase in this.ListaClases)
             {
-                if (objClase.Id == idClase)
+                if (clase.Id == idClase)
                 {
-                    objClase.ReservarCupo();
-                    return;
+                    return clase.ReservarCupo(socio);
                 }
             }
-            Console.WriteLine("Error: El código de clase ingresado no existe.");
+            Console.WriteLine("Clase no encontrada.");
+            return false;
         }
     }
 }

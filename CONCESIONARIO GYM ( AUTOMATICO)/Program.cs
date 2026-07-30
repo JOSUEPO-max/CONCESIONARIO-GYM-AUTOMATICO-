@@ -102,8 +102,25 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                                 break;
                             }
 
-                            servicioClases.AgendarCupoEnClase(idClase);
-                            Database.GuardarClases(); // Guarda la reserva
+                            // Pedimos la cédula del socio para asociarlo a la reserva
+                            string cedulaReserva = Validaciones.LeerTextoNoVacio("Ingrese la Cédula del socio que reserva: ");
+
+                            // Buscamos si el socio existe en la lista del gimnasio
+                            Socio socioQueReserva = miGimnasio.Socios.FirstOrDefault(s => s.Cedula == cedulaReserva);
+
+                            if (socioQueReserva != null)
+                            {
+                                bool reservado = servicioClases.AgendarCupoEnClase(idClase, socioQueReserva);
+                                if (reservado)
+                                {
+                                    Database.GuardarClases(); // Guarda la reserva en el JSON
+                                    MenuConsola.MostrarMensajeExito($"Cupo agendado con éxito para {socioQueReserva.Nombre}.");
+                                }
+                            }
+                            else
+                            {
+                                MenuConsola.MostrarMensajeError("No se encontró ningún socio con esa cédula. Debe registrarlo primero.");
+                            }
                             break;
 
                         case "5":
@@ -117,7 +134,8 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                                 break;
                             }
 
-                            servicioSocios.ConsultarSocioPorCedula(cedulaBuscar);
+                            //  Le pasamos 'Database.Clases' para que muestre las clases reservadas en su ficha
+                            servicioSocios.ConsultarSocioPorCedula(cedulaBuscar, Database.Clases);
                             break;
 
                         case "6":
