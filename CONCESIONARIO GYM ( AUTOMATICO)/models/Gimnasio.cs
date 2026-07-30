@@ -60,6 +60,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.models
             Console.WriteLine($"Socio {objSocio.Nombre} registrado correctamente.");
         }
 
+
         public void ListarSocios()
         {
             Console.WriteLine($"La lista de socios del gimnasio {this.Nombre} ubicado en {this.Direccion} es:");

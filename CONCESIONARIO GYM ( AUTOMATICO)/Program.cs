@@ -83,31 +83,60 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
                         case "2":
                             Console.WriteLine("\n--- RENOVACIÓN DE MEMBRESÍA ---");
-                            string cedulaRenovar = Validaciones.LeerCedulaValida("Ingrese Cédula del socio: ");
+                            string cedulaRenovar = Validaciones.LeerTextoNoVacio("Ingrese Cédula del socio (o '0' para regresar): ");
+
+                            //  Cancelar si es '0'
+                            if (cedulaRenovar == "0")
+                            {
+                                MenuConsola.MostrarMensajeError("Operación cancelada.");
+                                break;
+                            }
+
                             servicioSocios.RenovarMembresia(cedulaRenovar);
                             break;
 
                         case "3":
                             Console.WriteLine("\n--- CONTROL DE ACCESO (CHECK-IN) ---");
-                            string cedulaAcceso = Validaciones.LeerCedulaValida("Ingrese Cédula para ingresar: ");
+                            string cedulaAcceso = Validaciones.LeerTextoNoVacio("Ingrese Cédula para ingresar (o '0' para regresar): ");
+
+                            // Cancelar si es '0'
+                            if (cedulaAcceso == "0")
+                            {
+                                MenuConsola.MostrarMensajeError("Operación cancelada.");
+                                break;
+                            }
+
                             servicioAcceso.ValidarIngreso(cedulaAcceso);
                             break;
 
                         case "4":
+                            Console.WriteLine("\n--- CLASES GRUPALES DISPONIBLES ---");
                             servicioClases.MostrarClasesDisponibles();
-                            Console.Write("\nIngrese el ID de la clase que desea reservar (o 0 para volver): ");
-                            int idClase = int.Parse(Console.ReadLine());
-                            if (idClase != 0)
+
+                            int idClase = Validaciones.LeerEnteroPositivo("Ingrese el ID de la clase que desea reservar (o 0 para volver): ");
+
+                            //  Cancelar si es 0
+                            if (idClase == 0)
                             {
-                                servicioClases.AgendarCupoEnClase(idClase);
+                                MenuConsola.MostrarMensajeError("Operación cancelada.");
+                                break;
                             }
-                            Console.WriteLine("\nPresione cualquier tecla para continuar...");
-                            Console.ReadKey();
+
+                            servicioClases.AgendarCupoEnClase(idClase);
+                            Database.GuardarClases(); // Guarda la reserva
                             break;
 
                         case "5":
                             Console.Write("\nIngrese Cédula a buscar: ");
-                            string cedulaBuscar = Console.ReadLine();
+                            string cedulaBuscar = Validaciones.LeerTextoNoVacio("Ingrese Cédula a buscar (o '0' para regresar): ");
+
+                            //  Cancelar si es '0'
+                            if (cedulaBuscar == "0")
+                            {
+                                MenuConsola.MostrarMensajeError("Operación cancelada.");
+                                break;
+                            }
+
                             servicioSocios.ConsultarSocioPorCedula(cedulaBuscar);
                             break;
 
