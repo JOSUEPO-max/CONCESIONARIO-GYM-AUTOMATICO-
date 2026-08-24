@@ -1,4 +1,5 @@
-﻿using CONCESIONARIO_GYM___AUTOMATICO_.models;
+﻿using CONCESIONARIO_GYM___AUTOMATICO_.Data;
+using CONCESIONARIO_GYM___AUTOMATICO_.models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +9,19 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
     public class ControlAcceso
     {
         private Gimnasio gimnasio;
-        private int accesosExitosos;
-        private int accesosDenegados;
 
         public Gimnasio Gimnasio { get => gimnasio; set => gimnasio = value; }
-        public int AccesosExitosos { get => accesosExitosos; set => accesosExitosos = value; }
-        public int AccesosDenegados { get => accesosDenegados; set => accesosDenegados = value; }
+
+        // Propiedades calculadas en tiempo real desde los datos persistentes guardados en la BD/JSON
+        public int AccesosExitosos
+        {
+            get => Database.Accesos.Count(a => a.Permitido && a.FechaHora.Date == DateTime.Today);
+        }
+
+        public int AccesosDenegados
+        {
+            get => Database.Accesos.Count(a => !a.Permitido && a.FechaHora.Date == DateTime.Today);
+        }
 
         public ControlAcceso(Gimnasio gimnasio)
         {
@@ -22,8 +30,6 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
                 throw new Exception("El control de acceso requiere un gimnasio válido.");
             }
             this.Gimnasio = gimnasio;
-            this.AccesosExitosos = 0;
-            this.AccesosDenegados = 0;
         }
 
         public bool ValidarIngreso(string cedula)
@@ -33,28 +39,55 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.servicios
                 throw new Exception("Debe ingresar una cédula válida para verificar el acceso.");
             }
 
+            bool permitido = false;
+            string motivo = "";
+            Socio socioEncontrado = null;
+
             foreach (Socio objSocio in this.Gimnasio.Socios)
             {
                 if (objSocio.Cedula == cedula)
                 {
-                    if (objSocio.EstadoMembresia)
-                    {
-                        Console.WriteLine($"[ACCESO PERMITIDO] Bienvenido/a {objSocio.Nombre}. Disfruta tu entrenamiento.");
-                        this.AccesosExitosos++;
-                        return true;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[ACCESO DENEGADO] El socio {objSocio.Nombre} tiene la membresía VENCIDA.");
-                        this.AccesosDenegados++;
-                        return false;
-                    }
+                    socioEncontrado = objSocio;
+                    break;
                 }
             }
 
-            Console.WriteLine("[ERROR] No se encontró ningún socio registrado con esa cédula.");
-            this.AccesosDenegados++;
-            return false;
+            if (socioEncontrado != null)
+            {
+                if (socioEncontrado.EstadoMembresia)
+                {
+                    Console.WriteLine($"[ACCESO PERMITIDO] Bienvenido/a {socioEncontrado.Nombre}. Disfruta tu entrenamiento.");
+                    permitido = true;
+                    motivo = "Acceso Concedido";
+                }
+                else
+                {
+                    Console.WriteLine($"[ACCESO DENEGADO] El socio {socioEncontrado.Nombre} tiene la membresía VENCIDA.");
+                    permitido = false;
+                    motivo = "Membresía Vencida";
+                }
+            }
+            else
+            {
+                Console.WriteLine("[ERROR] No se encontró ningún socio registrado con esa cédula.");
+                permitido = false;
+                motivo = "Socio No Encontrado";
+            }
+
+            // 🔴 GUARDAR ACCESO DE FORMA PERMANENTE EN EL JSON
+            RegistroAcceso nuevoRegistro = new RegistroAcceso
+            {
+                CedulaSocio = cedula,
+                NombreSocio = socioEncontrado != null ? socioEncontrado.Nombre : "Desconocido",
+                FechaHora = DateTime.Now,
+                Permitido = permitido,
+                Motivo = motivo
+            };
+
+            Database.Accesos.Add(nuevoRegistro);
+            Database.GuardarAccesos();
+
+            return permitido;
         }
 
         public void MostrarResumenAcceso()

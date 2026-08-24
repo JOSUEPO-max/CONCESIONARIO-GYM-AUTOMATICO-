@@ -23,12 +23,13 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
             GestionSocios servicioSocios = new GestionSocios(miGimnasio);
             ControlAcceso servicioAcceso = new ControlAcceso(miGimnasio);
-            GestionClases servicioClases = new GestionClases();
 
-            // Asignar la lista de clases cargada desde JSON
+            
+
+            GestionClases servicioClases = new GestionClases();
             servicioClases.ListaClases = Database.Clases;
 
-          
+
 
             bool ejecutando = true;
 
@@ -76,17 +77,14 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             break;
 
                         case "3":
-                            Console.WriteLine("\n--- CONTROL DE ACCESO (CHECK-IN) ---");
-                            string cedulaAcceso = Validaciones.LeerTextoNoVacio("Ingrese Cédula para ingresar (o '0' para regresar): ");
+                            Console.WriteLine("\n--- VALIDAR INGRESO DIARIO (CHECK-IN) ---");
+                            string cedulaIngreso = Validaciones.LeerTextoNoVacio("Ingrese Cédula del socio: ");
 
-                            // Cancelar si es '0'
-                            if (cedulaAcceso == "0")
-                            {
-                                MenuConsola.MostrarMensajeError("Operación cancelada.");
-                                break;
-                            }
+                            // 1. Usar el método real de tu clase: ValidarIngreso
+                            bool permitido = servicioAcceso.ValidarIngreso(cedulaIngreso);
 
-                            servicioAcceso.ValidarIngreso(cedulaAcceso);
+                            // 2. Guardar accesos (sin pasar parámetros)
+                            Database.GuardarAccesos();
                             break;
 
                         case "4":
