@@ -72,6 +72,11 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             ServicioEmail emailService = new ServicioEmail();
                             emailService.EnviarComprobantePago(nuevoSocio, 20.00m, fechaHoy);
 
+                            // 4. Enviar SMS de confirmación
+                            Console.WriteLine("Enviando SMS de bienvenida...");
+                            ServicioSMS smsService = new ServicioSMS();
+                            smsService.EnviarSmsConfirmacion(nuevoSocio.Telefono, nuevoSocio.Nombre);
+
                             break;
 
                         case "2":
