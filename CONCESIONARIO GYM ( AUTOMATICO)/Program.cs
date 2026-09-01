@@ -1,4 +1,5 @@
 ﻿using CONCESIONARIO_GYM___AUTOMATICO_.Data;
+using CONCESIONARIO_GYM___AUTOMATICO_.IA;
 using CONCESIONARIO_GYM___AUTOMATICO_.models;
 using CONCESIONARIO_GYM___AUTOMATICO_.servicios;
 using CONCESIONARIO_GYM___AUTOMATICO_.utills;
@@ -158,6 +159,19 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             break;
 
                         case "7":
+                            Console.WriteLine("\n--- ASISTENTE VIRTUAL IA ---");
+                            string pregunta = Validaciones.LeerTextoNoVacio("Ingrese su consulta: ");
+
+                            Console.WriteLine("\n[PROCESANDO] Consultando a OpenAI...");
+
+                            var respuesta = ServicioIA.PreguntarAsync(pregunta).GetAwaiter().GetResult();
+
+                            Console.WriteLine("\n==================================================");
+                            Console.WriteLine($"[RESPUESTA IA - {respuesta.Fecha:HH:mm:ss}]:\n{respuesta.Texto}");
+                            Console.WriteLine("==================================================");
+                            break;
+
+                        case "8":
                             ejecutando = false;
                             MenuConsola.MostrarMensajeExito("Gracias por usar GymSmart OS. ¡Hasta pronto!");
                             break;
