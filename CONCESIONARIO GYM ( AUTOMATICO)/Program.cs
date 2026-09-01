@@ -5,6 +5,7 @@ using CONCESIONARIO_GYM___AUTOMATICO_.utills;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CONCESIONARIO_GYM___AUTOMATICO_
 {
@@ -44,22 +45,33 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                     switch (opcion)
                     {
                         case "1":
-                            Console.WriteLine("\n--- REGISTRO DE NUEVO SOCIO ---");
-                            int id = Validaciones.LeerEnteroPositivo("Ingrese ID del socio: ");
-                            if (id == 0)
-                            {
-                                MenuConsola.MostrarMensajeError("Operación cancelada por el usuario.");
-                                break; // Rompe el case y regresa al menú
-                            }
-                            string nombre = Validaciones.LeerTextoNoVacio("Ingrese Nombre completo: ");
-                            string cedula = Validaciones.LeerCedulaValida("Ingrese Cédula (10 dígitos): ");
+                            Console.WriteLine("\n--- REGISTRAR NUEVO SOCIO ---");
+
+                            // Uso de tus métodos de validación
+                            string cedula = Validaciones.LeerCedulaValida("Ingrese Cédula: ");
+                            string nombre = Validaciones.LeerTextoNoVacio("Ingrese Nombre: ");
                             int edad = Validaciones.LeerEnteroPositivo("Ingrese Edad: ");
                             string tipo = Validaciones.LeerTextoNoVacio("Ingrese Tipo de Membresía (estandar/vip): ");
+                            string correo = Validaciones.LeerTextoNoVacio("Ingrese Correo: ");
+                            string telefono = Validaciones.LeerTextoNoVacio("Ingrese Teléfono: ");
 
-                            Socio nuevoSocio = new Socio(id, nombre, cedula, edad, true, tipo);
-                            servicioSocios.RegistrarNuevoSocio(nuevoSocio);
+                            int nuevoId = Database.Socios.Count + 1;
+                            DateTime fechaHoy = DateTime.Now;
+
+                            // 1. Instancia del socio con membresía activa
+                            Socio nuevoSocio = new Socio(nuevoId, nombre, cedula, edad, true, tipo, correo, telefono);
+
+                            // 2. Guardar e impulsar la persistencia en JSON
+                            Database.Socios.Add(nuevoSocio);
                             Database.GuardarSocios();
-                            MenuConsola.MostrarMensajeExito("Socio registrado y guardado correctamente.");
+
+                            Console.WriteLine("\n[ÉXITO] Socio registrado correctamente.");
+
+                            // 3. Enviar correo de recibo por $20
+                            Console.WriteLine("Enviando comprobante de pago por correo...");
+                            ServicioEmail emailService = new ServicioEmail();
+                            emailService.EnviarComprobantePago(nuevoSocio, 20.00m, fechaHoy);
+
                             break;
 
                         case "2":

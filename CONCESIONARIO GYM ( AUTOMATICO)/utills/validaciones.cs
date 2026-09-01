@@ -52,6 +52,24 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.utills
                 }
                 Console.WriteLine("[ERROR]: Este campo no puede quedar vacío.");
             }
+
+
+
+        }
+
+        
+        public static int LeerEntero(string mensaje)
+        {
+            while (true)
+            {
+                Console.Write(mensaje);
+                string entrada = Console.ReadLine()?.Trim();
+                if (int.TryParse(entrada, out int valor))
+                {
+                    return valor;
+                }
+                Console.WriteLine("[ERROR]: Debe ingresar un número entero válido.");
+            }
         }
     }
 }

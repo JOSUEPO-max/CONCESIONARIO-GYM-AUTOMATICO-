@@ -1,8 +1,9 @@
-﻿using CONCESIONARIO_GYM___AUTOMATICO_.models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
+using CONCESIONARIO_GYM___AUTOMATICO_.models;
+using CONCESIONARIO_GYM___AUTOMATICO_.servicios;
 namespace CONCESIONARIO_GYM___AUTOMATICO_.Data
 {
     public static class Database
