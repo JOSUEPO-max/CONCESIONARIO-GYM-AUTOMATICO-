@@ -9,7 +9,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.IA
 {
     public class ServicioIA
     {
-        private const string ApiKey = "clavesecreta";
+        private const string ApiKey = "calve secreta";
         private const string ApiUrl = "https://api.openai.com/v1/chat/completions";
 
         public static async Task<RespuestaIA> PreguntarAsync(string preguntaUsuario)
@@ -22,12 +22,12 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_.IA
 
                     var requestBody = new
                     {
-                        model = "gpt-3.5-turbo",
+                        model = "gpt-4o-mini", // Especificamos exactamente el modelo gpt-4o-mini
                         messages = new[]
                         {
-                            new { role = "system", content = "Eres el asistente del gimnasio Smart Fit. Responde de forma motivadora y breve." },
-                            new { role = "user", content = preguntaUsuario }
-                        },
+                        new { role = "system", content = "Eres el asistente virtual experto y motivador del gimnasio Smart Fit. Responde de forma muy concisa, profesional y directa." },
+                        new { role = "user", content = preguntaUsuario }
+                         },
                         max_tokens = 150
                     };
 

@@ -12,7 +12,10 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 {
     class Program
     {
-        static void Main(string[] args)
+        // =========================================================================
+        // CAMBIO 1: SE CAMBIÓ 'void' POR 'async Task' PARA ENVIAR WHATSAPP DE FORMA ASÍNCRONA
+        // =========================================================================
+        static async Task Main(string[] args)
         {
             // 1. Cargar datos almacenados previamente en JSON
             Database.CargarDatos();
@@ -26,12 +29,13 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
             GestionSocios servicioSocios = new GestionSocios(miGimnasio);
             ControlAcceso servicioAcceso = new ControlAcceso(miGimnasio);
 
-            
-
             GestionClases servicioClases = new GestionClases();
             servicioClases.ListaClases = Database.Clases;
 
-
+            // =========================================================================
+            // CAMBIO 2: INSTANCIA DEL NUEVO SERVICIO DE WHATSAPP OFICIAL DE META
+            // =========================================================================
+            ServicioWhatsAppMeta waService = new ServicioWhatsAppMeta();
 
             bool ejecutando = true;
 
@@ -54,7 +58,11 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             int edad = Validaciones.LeerEnteroPositivo("Ingrese Edad: ");
                             string tipo = Validaciones.LeerTextoNoVacio("Ingrese Tipo de Membresía (estandar/vip): ");
                             string correo = Validaciones.LeerTextoNoVacio("Ingrese Correo: ");
-                            string telefono = Validaciones.LeerTextoNoVacio("Ingrese Teléfono: ");
+
+                            // =========================================================================
+                            // CAMBIO 3: RECORDATORIO DE FORMATO PARA WHATSAPP (EJ: 5939XXXXXXXX)
+                            // =========================================================================
+                            string telefono = Validaciones.LeerTextoNoVacio("Ingrese Teléfono (ej: 5939XXXXXXXX): ");
 
                             int nuevoId = Database.Socios.Count + 1;
                             DateTime fechaHoy = DateTime.Now;
@@ -73,10 +81,11 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             ServicioEmail emailService = new ServicioEmail();
                             emailService.EnviarComprobantePago(nuevoSocio, 20.00m, fechaHoy);
 
-                            // 4. Enviar SMS de confirmación
-                            Console.WriteLine("Enviando SMS de bienvenida...");
-                            ServicioSMS smsService = new ServicioSMS();
-                            smsService.EnviarSmsConfirmacion(nuevoSocio.Telefono, nuevoSocio.Nombre);
+                            // =========================================================================
+                            // CAMBIO 4: SE REMOVIÓ EL SMS Y SE AGREGÓ EL ENVÍO DE WHATSAPP CON AWAIT
+                            // =========================================================================
+                            Console.WriteLine("Enviando mensaje de bienvenida por WhatsApp...");
+                            await waService.EnviarMensajeBienvenidaAsync(nuevoSocio.Telefono, nuevoSocio.Nombre);
 
                             break;
 
@@ -84,7 +93,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             Console.WriteLine("\n--- RENOVACIÓN DE MEMBRESÍA ---");
                             string cedulaRenovar = Validaciones.LeerTextoNoVacio("Ingrese Cédula del socio (o '0' para regresar): ");
 
-                            //  Cancelar si es '0'
+                            // Cancelar si es '0'
                             if (cedulaRenovar == "0")
                             {
                                 MenuConsola.MostrarMensajeError("Operación cancelada.");
@@ -111,7 +120,7 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
                             int idClase = Validaciones.LeerEnteroPositivo("Ingrese el ID de la clase que desea reservar (o 0 para volver): ");
 
-                            //  Cancelar si es 0
+                            // Cancelar si es 0
                             if (idClase == 0)
                             {
                                 MenuConsola.MostrarMensajeError("Operación cancelada.");
@@ -143,14 +152,14 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                             Console.Write("\nIngrese Cédula a buscar: ");
                             string cedulaBuscar = Validaciones.LeerTextoNoVacio("Ingrese Cédula a buscar (o '0' para regresar): ");
 
-                            //  Cancelar si es '0'
+                            // Cancelar si es '0'
                             if (cedulaBuscar == "0")
                             {
                                 MenuConsola.MostrarMensajeError("Operación cancelada.");
                                 break;
                             }
 
-                            //  Le pasamos 'Database.Clases' para que muestre las clases reservadas en su ficha
+                            // Le pasamos 'Database.Clases' para que muestre las clases reservadas en su ficha
                             servicioSocios.ConsultarSocioPorCedula(cedulaBuscar, Database.Clases);
                             break;
 
@@ -164,7 +173,10 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
 
                             Console.WriteLine("\n[PROCESANDO] Consultando a OpenAI...");
 
-                            var respuesta = ServicioIA.PreguntarAsync(pregunta).GetAwaiter().GetResult();
+                            // =========================================================================
+                            // CAMBIO 5: LLAMADA SIMPLIFICADA A LA IA UTILIZANDO AWAIT DIRECTO
+                            // =========================================================================
+                            var respuesta = await ServicioIA.PreguntarAsync(pregunta);
 
                             Console.WriteLine("\n==================================================");
                             Console.WriteLine($"[RESPUESTA IA - {respuesta.Fecha:HH:mm:ss}]:\n{respuesta.Texto}");
@@ -195,11 +207,9 @@ namespace CONCESIONARIO_GYM___AUTOMATICO_
                 }
             }
         }
-
-         }
     }
+}
 
 
-            
 
 
